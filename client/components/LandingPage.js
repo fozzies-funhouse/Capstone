@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+let mixer = null;
 class LandingPage extends Component {
   componentDidMount() {
     //Editor gui
@@ -18,7 +19,7 @@ class LandingPage extends Component {
     // Renderer
 
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     this.mount.appendChild(this.renderer.domElement);
@@ -26,7 +27,7 @@ class LandingPage extends Component {
     // Camera
     this.camera = new THREE.PerspectiveCamera(
       75, // fov
-      (window.innerWidth * 0.5) / (window.innerHeight * 0.5),
+      window.innerWidth / window.innerHeight,
       0.5, // near
       1000 // far
     );
@@ -62,14 +63,36 @@ class LandingPage extends Component {
         console.log('couldnt load');
       }
     );
+    gltfLoader.load(
+      '../../mech_drone/scene.gltf',
+      (gltf) => {
+        console.log(gltf);
+        gltf.scene.scale.set(10, 10, 10);
+        gltf.scene.position.y = 5;
+
+        // Animating Model
+        mixer = new THREE.AnimationMixer(gltf.scene); // Animation handler
+        const action = mixer.clipAction(gltf.animations[0]);
+
+        action.play();
+
+        this.scene.add(gltf.scene);
+      },
+      () => {
+        console.log('Processing');
+      },
+      () => {
+        console.log('couldnt load');
+      }
+    );
 
     // Ambiant Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2);
     // ambientLight.castShadow = true;
 
     // Directional light
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 4);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.set(1024, 1024);
     directionalLight.shadow.camera.far = 15;
@@ -77,8 +100,11 @@ class LandingPage extends Component {
     directionalLight.shadow.camera.top = 7;
     directionalLight.shadow.camera.right = 7;
     directionalLight.shadow.camera.bottom = -7;
-    directionalLight.position.set(5, 5, 5);
+    directionalLight.position.set(10, 5, 5);
+    // directionalLight.lookAt(5, 5, 5);
     this.scene.add(directionalLight);
+
+    const lightHlper1 = new THREE.DirectionalLightHelper(directionalLight);
 
     this.scene.add(ambientLight);
 
@@ -104,14 +130,18 @@ class LandingPage extends Component {
     // this.cube.rotation.y += 0.01;
     // this.scene.rotation.y += 0.003;
 
+    if (mixer) {
+      mixer.update(0.008);
+    }
+
     this.renderer.render(this.scene, this.camera);
   };
 
   handleWindowResize = () => {
-    this.camera.aspect = (window.innerWidth * 0.8) / (window.innerHeight * 0.6);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
 
-    this.renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.6);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.render(this.scene, this.camera);
   };
 

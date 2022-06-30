@@ -24,6 +24,9 @@ const Product = db.define('product', {
   image_url: {
     type: Sequelize.TEXT,
   },
+  model_url: {
+    type: Sequelize.TEXT,
+  }
 });
 
 module.exports = Product;

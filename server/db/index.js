@@ -23,8 +23,10 @@ CartDetail.belongsTo(Order);
 User.hasMany(Order);
 Order.belongsTo(User);
 
-Tag.belongsToMany(Product, { through: 'productTags' });
-Product.belongsToMany(Tag, { through: 'productTags' });
+const productTags = db.define('productTags');
+
+Tag.belongsToMany(Product, { through: productTags });
+Product.belongsToMany(Tag, { through: productTags });
 
 //User is created and assigned a cart
 const createAndAssignCart = async (user) => {
@@ -45,6 +47,7 @@ module.exports = {
     Order,
     CartDetail,
     Cart,
-    Tag
+    Tag,
+    productTags
   },
 };

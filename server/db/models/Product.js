@@ -8,8 +8,8 @@ const Product = db.define('product', {
     validate: { notEmpty: true },
   },
   type: {
-    type: Sequelize.ENUM('snowboard', 'ski'),
-    defaultValue: 'snowboard',
+    type: Sequelize.ENUM('snowboard', 'ski', 'shoe'),
+    defaultValue: 'shoe',
   },
   price: {
     type: Sequelize.FLOAT,
@@ -24,6 +24,9 @@ const Product = db.define('product', {
   image_url: {
     type: Sequelize.TEXT,
   },
+  model_url: {
+    type: Sequelize.TEXT,
+  }
 });
 
 module.exports = Product;

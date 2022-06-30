@@ -5,6 +5,7 @@ const Product = require('./models/Product');
 const Order = require('./models/Order');
 const CartDetail = require('./models/CartDetail');
 const Cart = require('./models/Cart');
+const Tag = require('./models/Tag');
 
 //associations could go here!
 User.hasOne(Cart);
@@ -21,6 +22,11 @@ CartDetail.belongsTo(Order);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+const productTags = db.define('productTags');
+
+Tag.belongsToMany(Product, { through: productTags });
+Product.belongsToMany(Tag, { through: productTags });
 
 //User is created and assigned a cart
 const createAndAssignCart = async (user) => {
@@ -41,5 +47,7 @@ module.exports = {
     Order,
     CartDetail,
     Cart,
+    Tag,
+    productTags
   },
 };

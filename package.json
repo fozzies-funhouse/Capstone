@@ -28,14 +28,17 @@
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "express": "^4.16.4",
+    "gsap": "^3.10.4",
     "history": "^4.9.0",
     "jsonwebtoken": "^8.5.1",
+    "lil-gui": "^0.16.1",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
     "react-bootstrap": "^2.4.0",
     "sequelize": "^6.3.5",
     "stripe": "^9.9.0",
-    "style-loader": "^3.3.1"
+    "style-loader": "^3.3.1",
+    "three": "^0.142.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
